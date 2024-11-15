@@ -1,0 +1,7 @@
+streamlit>=1.24.0
+extra-streamlit-components>=0.1.60
+sqlalchemy>=1.4.0
+requests>=2.31.0
+pillow>=10.0.0
+werkzeug>=2.3.0
+pandas>=2.0.0 
