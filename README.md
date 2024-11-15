@@ -153,3 +153,60 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 - DreamFactory team and community
 - Streamlit framework developers
 - All contributors to this project
+
+## Docker Installation
+
+You can run the DreamFactory Access Portal using Docker:
+
+### Option 1: Using Docker Compose (Recommended)
+
+1. Create a `.streamlit/secrets.toml` file with your DreamFactory credentials:
+```toml
+dreamfactory_url = "your_dreamfactory_instance_url"
+admin_api_key = "your_dreamfactory_admin_api_key"
+```
+
+2. Run with Docker Compose:
+```bash
+docker-compose up --build
+```
+
+3. Access the portal at `http://localhost:8501`
+
+### Option 2: Using Docker Directly
+
+1. Build the Docker image:
+```bash
+docker build -t dreamfactory-portal .
+```
+
+2. Run the container:
+```bash
+docker run -p 8501:8501 -v ~/.streamlit:/app/.streamlit dreamfactory-portal
+```
+
+### Docker Configuration Notes
+
+- The application runs on port 8501 by default
+- The container uses a non-root user for security
+- The SQLite database persists in the container
+- Secrets are mounted from your local `.streamlit` directory
+- The container automatically pulls the latest code from GitHub during build
+
+### Troubleshooting Docker Setup
+
+1. Permission Issues:
+   - Ensure your `.streamlit` directory has proper permissions
+   - Check that secrets.toml is readable by the container
+
+2. Port Conflicts:
+   - If port 8501 is in use, modify the port mapping in docker-compose.yml
+   - Example: `"8502:8501"` to use port 8502 on the host
+
+3. Container Access:
+   - Use `docker logs dreamfactory-portal` to view application logs
+   - Use `docker exec -it dreamfactory-portal bash` to access the container shell
+
+4. Volume Mounts:
+   - Ensure your ~/.streamlit directory exists
+   - Check that secrets.toml is properly mounted
