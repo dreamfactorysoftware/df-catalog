@@ -23,21 +23,19 @@ RUN git clone https://github.com/dreamfactorysoftware/df-catalog.git /app
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create the .streamlit directory
-RUN mkdir -p .streamlit
-
-# Copy the example secrets file if secrets.toml doesn't exist
-RUN if [ ! -f .streamlit/secrets.toml ]; then \
-    cp .streamlit/secrets.toml.example .streamlit/secrets.toml; \
-    fi
-
-# Expose port 8501 for Streamlit
-EXPOSE 8501
+# Create the .streamlit directory and set permissions
+RUN mkdir -p /app/.streamlit && \
+    mkdir -p /home/streamlit/.streamlit
 
 # Create a non-root user
 RUN useradd -m -s /bin/bash streamlit
-RUN chown -R streamlit:streamlit /app
+RUN chown -R streamlit:streamlit /app /home/streamlit/.streamlit
+
+# Switch to non-root user
 USER streamlit
+
+# Expose port 8501 for Streamlit
+EXPOSE 8501
 
 # Run the application
 ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"] 
